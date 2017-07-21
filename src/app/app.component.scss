@@ -1,0 +1,24 @@
+.container{
+  padding: 0;
+  margin:0;
+  width:100%;
+}
+app-left, app-right, app-side{
+  background: #ccc;
+  height: 1000px;
+}
+
+app-top{
+  position: fixed;
+  top:0;
+  width: 100%;
+  background: #eee;
+  height: 50px;
+  z-index:1;
+}
+
+app-side{
+  position: fixed;
+  background: #aaa;
+  right: 0;
+}
