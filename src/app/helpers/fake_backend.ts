@@ -4,7 +4,7 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 export function fakeBackendFactory(backend: MockBackend, options: BaseRequestOptions) {
     // configure fake backend
     backend.connections.subscribe((connection: MockConnection) => {
-        let testUser = { username: 'mimi', password: '123456' };
+        let testUser = { username: 'mimi', password: '123456', token: 'fake-jwt-token' };
 
         // wrap in timeout to simulate server api call
         setTimeout(() => {
@@ -17,14 +17,29 @@ export function fakeBackendFactory(backend: MockBackend, options: BaseRequestOpt
                 // check user credentials and return fake jwt token if valid
                 if (params.username === testUser.username && params.password === testUser.password) {
                     connection.mockRespond(new Response(
-                        new ResponseOptions({ status: 200, body: { token: 'fake-jwt-token' } })
+                        new ResponseOptions({ status: 200, body: { token: testUser.token } })
                     ));
                 } else {
                     connection.mockRespond(new Response(
                         new ResponseOptions({ status: 200 })
                     ));
                 }
+            } else if (connection.request.url.endsWith('/api/verify') && connection.request.method === RequestMethod.Post){
+
+              let params = JSON.parse(connection.request.getBody());
+              if (params.token === testUser.token) {
+                  connection.mockRespond(new Response(
+                      new ResponseOptions({ status: 200, body: { authorized: 'true' } })
+                  ));
+              } else {
+                  connection.mockRespond(new Response(
+                      new ResponseOptions({ status: 200, body: {authorized: 'false' } })
+                  ));
+              }
             }
+
+
+
 
         }, 500);
 
