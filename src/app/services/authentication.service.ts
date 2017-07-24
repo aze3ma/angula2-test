@@ -10,15 +10,17 @@ export class AuthenticationService {
     constructor(private http: Http) {
         // set token if saved in local storage
 
-        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        this.token = currentUser && currentUser.token;
+        // var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        // this.token = currentUser && currentUser.token;
     }
-    verifyToken(token){
-      return this.http.post('/api/verify', JSON.stringify({ token: token })).map((response: Response) => {
-        let status = response.json() && response.json().authorized;
-
-        return status;
-      });
+    verifyToken(token) {
+      return this.http.post('/api/verify', token )
+      .map((res:any) => res.json())
+      .subscribe(
+        data => {
+          let status = data.authorized;
+          return status;
+        })
     }
 
     login(username: string, password: string): Observable<boolean> {
@@ -26,9 +28,8 @@ export class AuthenticationService {
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let token = response.json() && response.json().token;
-                let verified = this.verifyToken(token)
-                console.log(this);
-                if (token && verified) {
+                // let verified = this.verifyToken(token);
+                if (token) {
                     // set token property
                     this.token = token;
 

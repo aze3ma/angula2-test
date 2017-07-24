@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -7,7 +8,9 @@ export class AuthGuard implements CanActivate {
     constructor(private router: Router) { }
 
     canActivate() {
-        if (localStorage.getItem('currentUser')) {
+      let inputToken = JSON.parse(localStorage.getItem('currentUser')).token;
+
+        if (inputToken == 'fake-jwt-token' ) {
             // logged in so return true
             return true;
         }
