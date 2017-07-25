@@ -45,6 +45,6 @@ import { AuthenticationService, UserService } from './services/index';
         fakeBackendProvider,
          MockBackend,
          BaseRequestOptions],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }
