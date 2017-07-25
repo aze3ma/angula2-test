@@ -28,8 +28,8 @@ export class AuthenticationService {
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let token = response.json() && response.json().token;
-                // let verified = this.verifyToken(token);
-                if (token) {
+                let verified = this.verifyToken(token);
+                if (token && verified) {
                     // set token property
                     this.token = token;
 
